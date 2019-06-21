@@ -9,6 +9,10 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import * as path from 'path';
 import {MySequence} from './sequence';
+import {resolve} from 'path';
+import {config} from 'dotenv';
+
+config({path: resolve(__dirname, '../.env')});
 
 export class ValeriabackendApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
