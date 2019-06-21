@@ -67,12 +67,12 @@
     "@loopback/rest": "^1.16.1",
     "@loopback/rest-explorer": "^1.2.3",
     "@loopback/service-proxy": "^1.2.3",
+    "@loopback/testlab": "^1.6.1",
     "@types/dotenv": "^6.1.1",
     "dotenv": "^8.0.0",
     "nodemon": "^1.19.1"
   },
   "devDependencies": {
-    "@loopback/testlab": "^1.6.1",
     "@types/node": "^10.14.9",
     "@typescript-eslint/parser": "^1.10.2",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
