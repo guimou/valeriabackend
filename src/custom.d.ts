@@ -1,5 +1,9 @@
 declare namespace Express {
+  export interface KcRoles {
+    roles: Array;
+  }
   export interface KcContent {
+    realm_access: KcRoles;
     scope: string;
     email_verified: boolean;
     name: string;
