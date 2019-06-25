@@ -1,13 +1,13 @@
 // Uncomment these imports to begin using these cool features!
 
-// import {inject} from '@loopback/context';
+import {inject} from '@loopback/context';
 
-import {get} from '@loopback/rest';
+import {Request, RestBindings, get} from '@loopback/rest';
 
 export class CheckssoController {
-  constructor() {}
+  constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
   @get('/checksso')
   hello(): string {
-    return 'Hello world!';
+    return this.req.kauth.grant.access_token.content.preferred_username;
   }
 }

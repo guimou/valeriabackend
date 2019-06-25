@@ -10,13 +10,13 @@ export class ExpressServer {
   private lbApp: ValeriabackendApplication;
 
   constructor(options: ApplicationConfig = {}) {
-    var session = require('express-session');
-    var Keycloak = require('keycloak-connect');
+    const session = require('express-session');
+    const Keycloak = require('keycloak-connect');
 
     this.app = express();
     this.lbApp = new ValeriabackendApplication(options);
 
-    var memoryStore = new session.MemoryStore();
+    const memoryStore = new session.MemoryStore();
 
     this.app.use(
       session({
@@ -27,7 +27,7 @@ export class ExpressServer {
       }),
     );
 
-    var keycloak = new Keycloak({store: memoryStore});
+    const keycloak = new Keycloak({store: memoryStore});
 
     this.app.use(
       keycloak.middleware({
