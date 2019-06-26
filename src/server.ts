@@ -27,6 +27,18 @@ export class ExpressServer {
       }),
     );
 
+    this.app.use(function(req, res, next) {
+      res.header(
+        'Access-Control-Allow-Origin',
+        '*, localhost:9000, localhost:9000/s3explorer, http://rgw-svd.exp.ulaval.ca',
+      );
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept',
+      );
+      next();
+    });
+
     const keycloak = new Keycloak({store: memoryStore});
 
     this.app.use(
