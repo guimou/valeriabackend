@@ -56,8 +56,8 @@ export class ExpressServer {
 
   // express app boot
   async start() {
-    const port = this.lbApp.restServer.config.port || 3000;
-    const host = this.lbApp.restServer.config.host || '127.0.0.1';
+    const port = 8080;
+    const host = '0.0.0.0';
     const server = this.app.listen(port, host);
     await pEvent(server, 'listening');
   }
