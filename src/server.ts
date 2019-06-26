@@ -57,7 +57,7 @@ export class ExpressServer {
   // express app boot
   async start() {
     const port = 8080;
-    const host = '0.0.0.0';
+    const host = 'localhost';
     const server = this.app.listen(port, host);
     await pEvent(server, 'listening');
   }
