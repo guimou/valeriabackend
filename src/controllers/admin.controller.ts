@@ -12,26 +12,36 @@ const rgw = new RGW({
 });
 const admin = rgw.admin;
 
-export class ListBucketsController {
+export class AdminController {
   constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
+  @get('/admin')
+  async loadData(): Promise<any> {
+    let bucketList = '';
+    let userQuota = 0;
+    let usedStorage = 0;
 
-  @get('/listbuckets')
-  async listBuckets(): Promise<string> {
-    let value = '';
+    //Get every buckets from user
     await admin
       .getBucketInfo({uid: 'daber323'}) //this.req.kauth.grant.access_token.content.preferred_username
       .then(function(bucket: string) {
-        value = JSON.stringify(bucket);
+        console.log(bucket);
+        bucketList = JSON.stringify(bucket);
       })
       .catch(function(error: string) {
         console.log(JSON.stringify(error));
       });
-    return value; //array of buckets
-  }
 
-  @get('/usedCapacity')
-  async getDataUsed(): Promise<number> {
-    let totalSize = 0;
+    //Get user quota (maximum storage)
+    await admin
+      .getUserQuota({uid: 'daber323'}) //this.req.kauth.grant.access_token.content.preferred_username
+      .then(function(bucket: any) {
+        userQuota = parseInt(JSON.stringify(bucket.max_size));
+      })
+      .catch(function(error: string) {
+        console.log(JSON.stringify(error));
+      });
+
+    //Get space currently used by user
     await admin
       .getBucketInfo({uid: 'daber323'}) //this.req.kauth.grant.access_token.content.preferred_username
       .then(async function(buckets: any) {
@@ -41,7 +51,7 @@ export class ListBucketsController {
             .then(function(b: any) {
               const string = JSON.stringify(b.usage['rgw.main'].size);
               const size = parseInt(string);
-              totalSize += size;
+              usedStorage += size;
             })
             .catch(function(error: any) {
               console.log(JSON.stringify(error));
@@ -51,20 +61,13 @@ export class ListBucketsController {
       .catch(function(error: any) {
         console.log(JSON.stringify(error));
       });
-    return totalSize; //in bytes
-  }
 
-  @get('/userquota')
-  async userQuota(): Promise<number> {
-    let quota = 0;
-    await admin
-      .getUserQuota({uid: 'daber323'}) //this.req.kauth.grant.access_token.content.preferred_username
-      .then(function(bucket: any) {
-        quota = parseInt(JSON.stringify(bucket.max_size));
-      })
-      .catch(function(error: string) {
-        console.log(JSON.stringify(error));
-      });
-    return quota; //in bytes
+    const resp = {
+      buckets: bucketList,
+      used_storage: usedStorage,
+      user_quota: userQuota,
+    };
+
+    return resp; //array of buckets
   }
 }
