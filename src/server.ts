@@ -12,6 +12,7 @@ export class ExpressServer {
   constructor(options: ApplicationConfig = {}) {
     const session = require('express-session');
     const Keycloak = require('keycloak-connect');
+    const cors = require('cors');
 
     this.app = express();
     this.lbApp = new ValeriabackendApplication(options);
@@ -38,6 +39,8 @@ export class ExpressServer {
     });
 
     const keycloak = new Keycloak({store: memoryStore});
+
+    this.app.options('*', cors());
 
     this.app.use(
       keycloak.middleware({
