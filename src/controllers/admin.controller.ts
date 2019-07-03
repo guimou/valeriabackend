@@ -17,6 +17,7 @@ export class AdminController {
   @get('/admin')
   async loadData(): Promise<any> {
     let bucketList = '';
+    let individualUsedStorage = '';
     let userQuota = 0;
     let usedStorage = 0;
 
@@ -68,6 +69,6 @@ export class AdminController {
       user_quota: userQuota,
     };
 
-    return resp; //array of buckets
+    return resp;
   }
 }

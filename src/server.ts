@@ -28,14 +28,12 @@ export class ExpressServer {
     );
 
     this.app.use(function(req, res, next) {
-      res.header(
-        'Access-Control-Allow-Origin',
-        '*, localhost:9000, localhost:9000/s3explorer, http://rgw-svd.exp.ulaval.ca',
-      );
+      res.header('Access-Control-Allow-Origin', '*');
       res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept',
       );
+      res.header('Access-Control-Allow-Credentials', 'true');
       next();
     });
 
