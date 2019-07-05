@@ -16,17 +16,16 @@ export class AdminController {
   constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
   @get('/admin')
   async loadData(): Promise<any> {
-    let bucketList = '';
-    let individualUsedStorage = '';
+    const individualUsedStorage = ['']; //impossible d'initialiser l'array sans aucun élément, nous l'enlevons plus tard
     let userQuota = 0;
     let usedStorage = 0;
+    let bucketArray;
 
     //Get every buckets from user
     await admin
       .getBucketInfo({uid: 'daber323'}) //this.req.kauth.grant.access_token.content.preferred_username
       .then(function(bucket: string) {
-        console.log(bucket);
-        bucketList = JSON.stringify(bucket);
+        bucketArray = bucket;
       })
       .catch(function(error: string) {
         console.log(JSON.stringify(error));
@@ -51,6 +50,7 @@ export class AdminController {
             .getBucketInfo({bucket: buckets[bucket]})
             .then(function(b: any) {
               const string = JSON.stringify(b.usage['rgw.main'].size);
+              individualUsedStorage.push(string);
               const size = parseInt(string);
               usedStorage += size;
             })
@@ -63,10 +63,13 @@ export class AdminController {
         console.log(JSON.stringify(error));
       });
 
+    individualUsedStorage.splice(0, 1); //on enlève l'élément d'initialistion inutile
+
     const resp = {
-      buckets: bucketList,
+      buckets: bucketArray,
       used_storage: usedStorage,
       user_quota: userQuota,
+      individual_storage: individualUsedStorage,
     };
 
     return resp;
